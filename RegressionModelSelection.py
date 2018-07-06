@@ -14,7 +14,28 @@ class ModelSelection():
     def __init__(self, X, y):
         self.X =pd.DataFrame(X)
         self.y = y
-    def bic_min(self):
+        
+    def min_aic(self):
+        aic = 10**100
+        aic_dataset = []
+        for L in range(0, len(self.X.columns.values)+1):
+            for subset in itertools.combinations(self.X.columns.values, L):
+                if len(subset) < 1:
+                    pass
+                else:
+                    mod = sm.GLM(self.y, self.X.get(list(subset)))
+                    res = mod.fit()
+                    
+                    if aic > sm.regression.linear_model.RegressionResults.aic(res):
+                        aic = sm.regression.linear_model.RegressionResults.aic(res)
+                        aic_dataset.append(aic)
+                        model = sm.GLM(self.y, self.X.get(list(subset)))
+        
+        res = model.fit()
+        print("AIC Minimization")
+        print(res.summary())
+        
+    def min_bic(self):
         bic = 10**100
         bic_dataset = []
         for L in range(0, len(self.X.columns.values)+1):
@@ -51,7 +72,6 @@ class ModelSelection():
         print("R-Squared Maximization")
         print(res.summary())
     
-    
     def max_adj_rsq(self):
         adj_rsq = .001
         for L in range(0, len(self.X.columns.values)+1):
@@ -68,7 +88,6 @@ class ModelSelection():
         res = model.fit()
         print("Adj R-Squared Maximization")
         print(res.summary())
-    
     
     def min_test_error(self, test_size = .33, random_state = None):
         mse_list = []
