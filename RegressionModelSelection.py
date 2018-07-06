@@ -33,7 +33,23 @@ class ModelSelection():
         res = model.fit()
         print("BIC Minimization")
         print(res.summary())
-    
+
+    def max_rsq(self):
+        rsq = .001
+        for L in range(0, len(self.X.columns.values)+1):
+            for subset in itertools.combinations(self.X.columns.values, L):
+                if len(subset) < 1:
+                    pass
+                else:
+                    mod = sm.OLS(self.y, self.X.get(list(subset)))
+                    res = mod.fit()
+                    
+                    if rsq < sm.regression.linear_model.RegressionResults.rsquared(res):
+                        rsq = sm.regression.linear_model.RegressionResults.rsquared(res)
+                        model = sm.OLS(self.y, self.X.get(list(subset)))
+        res = model.fit()
+        print("R-Squared Maximization")
+        print(res.summary())
     
     
     def max_adj_rsq(self):
