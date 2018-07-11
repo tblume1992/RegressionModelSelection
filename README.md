@@ -5,4 +5,4 @@ RegressionModelSelection has 4 functions which will iterate through all possible
 
 Run model_selection_test for a good idea of how it all works.
 
-For further analysis you could download my "OccamsWindow" script which is a model averaging technique and comapare results. 
+For further analysis you could download my "OccamsWindow" script which is a model averaging technique and compare results. 
